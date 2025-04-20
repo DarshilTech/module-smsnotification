@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="DarshilTech_SmsNotification::sms_template" title="SMS Template" sortOrder="90"/>
+            </resource>
+        </resources>
+    </acl>
+</config>

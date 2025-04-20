@@ -1,0 +1,26 @@
+{
+    "name": "darshiltech/module-smsnotification",
+    "description": "Magento 2 SMS Notification Module with Twilio SDK",
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "license": [
+      "OSL-3.0",
+      "AFL-3.0"
+    ],
+    "require": {
+      "php": ">=7.4",
+      "magento/framework": "*",
+      "twilio/sdk": "^7.0"
+    },
+    "autoload": {
+      "files": [
+        "registration.php"
+      ],
+      "psr-4": {
+        "DarshilTech\\SmsNotification\\": ""
+      }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+  }
+  

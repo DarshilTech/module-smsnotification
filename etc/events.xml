@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="customer_register_success">
+        <observer name="handle_customer_register_success" instance="DarshilTech\SmsNotification\Observer\CustomerRegisterSuccessObserver" />
+    </event>
+    <!-- <event name="customer_forgotpassword_success">
+        <observer name="handle_customer_forgotpassword_success" instance="DarshilTech\SmsNotification\Observer\CustomerForgotPasswordSuccessObserver" />
+    </event> -->
+    <event name="sales_order_place_after">
+        <observer name="handle_sales_order_place_after" instance="DarshilTech\SmsNotification\Observer\SalesOrderPlaceAfterObserver" />
+    </event>
+    <event name="sales_order_invoice_save_after">
+        <observer name="handle_sales_order_invoice_save_after" instance="DarshilTech\SmsNotification\Observer\SalesOrderInvoiceSaveAfterObserver" />
+    </event>
+    <event name="sales_order_creditmemo_save_after">
+        <observer name="handle_sales_order_creditmemo_save_after" instance="DarshilTech\SmsNotification\Observer\SalesOrderCreditMemoSaveAfterObserver" />
+    </event>
+    <event name="sales_order_shipment_save_after">
+        <observer name="handle_sales_order_shipment_save_after" instance="DarshilTech\SmsNotification\Observer\SalesOrderShipmentSaveAfterObserver" />
+    </event>
+</config>

@@ -1,0 +1,37 @@
+<div style="position: relative;">
+    <textarea class="admin__control-textarea" data-bind="
+    value: value,
+    valueUpdate: valueUpdate,
+    hasFocus: focused,
+    attr: {
+        name: inputName,
+        cols: cols,
+        rows: rows,
+        'aria-describedby': noticeId,
+        placeholder: placeholder,
+        id: uid,
+        disabled: disabled
+    }"></textarea>
+
+    <!-- Add button to open modal -->
+    <button type="button" class="action-default open-modal-btn"
+        style="position:absolute; top:5px; right:5px;"
+        data-bind="click: openDialogWindow">
+        <span data-bind="text: $t('Insert Variable')"></span>
+    </button>
+</div>
+
+<!-- Scope and template for modal -->
+<div id="variables-chooser" class="variable-modal" style="display: none;">
+    <ul class="insert-variable" data-bind="foreach: variables">
+        <li>
+            <b data-bind="text: $t(key)"></b>
+        </li>
+        <ul class="insert-variable" data-bind="foreach: childVariables">
+            <li>
+                <a href="javascript:void(0);"
+                    data-bind="text: $t(label), click: function() { $parent.insertVariable($data) }"></a>
+            </li>
+        </ul>
+    </ul>
+</div>

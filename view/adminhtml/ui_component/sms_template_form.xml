@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:Ui/etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">
+                sms_template_form.sms_template_form_data_source
+            </item>
+            <item name="namespace" xsi:type="string">sms_template_form</item>
+        </item>
+        <item name="template" xsi:type="string">
+            templates/form/collapsible
+        </item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="back"
+                class="DarshilTech\SmsNotification\Block\Adminhtml\SMS\Edit\BackButton" />
+            <button name="delete"
+                class="DarshilTech\SmsNotification\Block\Adminhtml\SMS\Edit\DeleteButton" />
+            <button name="save"
+                class="DarshilTech\SmsNotification\Block\Adminhtml\SMS\Edit\SaveButton" />
+            <button name="save_and_continue"
+                class="DarshilTech\SmsNotification\Block\Adminhtml\SMS\Edit\SaveAndContinueButton" />
+        </buttons>
+        <namespace>sms_template_form</namespace>
+        <deps>
+            <dep>sms_template_form.sms_template_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="sms_template_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <validateUrl path="smsnotification/template/validate" />
+            <submitUrl path="smsnotification/template/save" />
+        </settings>
+        <dataProvider name="sms_template_form_data_source"
+            class="DarshilTech\SmsNotification\Ui\DataProvider\TemplateDataProvider">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="SMS Template" sortOrder="10">
+        <settings>
+            <collapsible>false</collapsible>
+            <opened>true</opened>
+            <label translate="true">SMS Templates Information</label>
+        </settings>
+        <field name="entity_id" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <dataScope>data.entity_id</dataScope>
+                <label translate="true">Id</label>
+                <visible>false</visible>
+            </settings>
+        </field>
+        <field name="template_name" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <dataScope>data.template_name</dataScope>
+                <label translate="true">Template Name</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="event">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">
+                    DarshilTech\SmsNotification\Model\Config\Source\Events</item>
+                <item name="config" xsi:type="array">
+                    <item name="formElement" xsi:type="string">select</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <dataScope>data.event</dataScope>
+                <label translate="true">Event</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+        <field name="template_content" >
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="formElement" xsi:type="string">textarea</item>
+                    <item name="component" xsi:type="string">DarshilTech_SmsNotification/js/textarea</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <dataScope>data.template_content</dataScope>
+                <label translate="true">Template Content</label>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+    </fieldset>
+</form>

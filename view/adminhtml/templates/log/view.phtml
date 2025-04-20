@@ -1,0 +1,64 @@
+<?php
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+use Magento\Framework\View\Element\Template;
+
+// Fetch and normalize data
+$data = $block->getLogData()?->getData() ?? [];
+
+// Convert provider options to key => label
+$provider = array_column($block->getProviderList(), 'label', 'value');
+
+// Convert event type options to key => label
+$eventType = array_column($block->getEvents(), 'label', 'value');
+
+// Fields to ignore
+$excludedFields = ['entity_id', 'created_at', 'updated_at'];
+
+/**
+ * Format a field key for display
+ */
+function formatKey(string $key): string {
+    return ucwords(str_replace('_', ' ', $key));
+}
+?>
+
+<?php if (!empty($data)): ?>
+    <table border="1" cellpadding="0" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+        <thead style="background-color: #f2f2f2;">
+            <tr>
+                <th style="text-align: left; padding: 10px; font-size: 18px;">
+                    <?= $block->escapeHtml(__('Field')) ?>
+                </th>
+                <th style="text-align: left; padding: 10px; font-size: 18px;">
+                    <?= $block->escapeHtml(__('Value')) ?>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($data as $key => $value): ?>
+                <?php if (in_array($key, $excludedFields, true)) continue; ?>
+                <tr>
+                    <td style="padding: 10px;">
+                        <strong><?= $block->escapeHtml(__(formatKey($key))) ?></strong>
+                    </td>
+                    <td style="padding: 10px;">
+                        <?php
+                        $output = match ($key) {
+                            'service_provider' => $provider[$value] ?? $value,
+                            'event_type'       => $eventType[$value] ?? $value,
+                            default            => is_array($value) ? json_encode($value) : $value,
+                        };
+                        echo nl2br($block->escapeHtml($output));
+                        ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php else: ?>
+    <p><?= $block->escapeHtml(__('No data found.')) ?></p>
+<?php endif; ?>

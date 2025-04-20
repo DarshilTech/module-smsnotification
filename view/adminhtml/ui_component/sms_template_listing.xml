@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">
+                sms_template_listing.sms_template_listing_data_source</item>
+            <item name="deps" xsi:type="string">
+                sms_template_listing.sms_template_listing_data_source</item>
+        </item>
+        <item name="spinner" xsi:type="string">sms_template_columns</item>
+    </argument>
+
+    <settings>
+        <spinner>sms_template_columns</spinner>
+        <deps>
+            <dep>sms_template_listing.sms_template_listing_data_source</dep>
+        </deps>
+        <buttons>
+            <button name="add">
+                <url path="*/*/new" />
+                <label translate="true">Add SMS Template</label>
+                <class>primary</class>
+            </button>
+        </buttons>
+    </settings>
+
+    <dataSource name="sms_template_listing_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">
+                Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
+            <argument name="name" xsi:type="string">sms_template_listing_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+                    <item name="update_url" path="mui/index/render" xsi:type="url" />
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">entity_id</item>
+                    </item>
+                </item>
+            </argument>
+        </argument>
+        <!-- <aclResource>Magento_Backend::marketing_communications</aclResource> -->
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks" />
+        <columnsControls name="columns_controls" />
+        <filters name="listing_filters" />
+        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
+            <action name="delete">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">delete</item>
+                        <item name="label" xsi:type="string" translate="true">Delete</item>
+                        <item name="url" xsi:type="url"
+                            path="smsnotification/template/massdelete" />
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Delete</item>
+                            <item name="message" xsi:type="string" translate="true">Do you want to
+                                delete selected record?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
+        </massaction>
+        <paging name="listing_paging" />
+    </listingToolbar>
+    <columns name="sms_template_columns">
+        <selectionsColumn name="ids" sortOrder="0">
+            <settings>
+                <indexField>entity_id</indexField>
+                <preserveSelectionsOnFilter>true</preserveSelectionsOnFilter>
+            </settings>
+        </selectionsColumn>
+        <column name="entity_id" class="Magento\Ui\Component\Listing\Columns\Column">
+            <settings>
+                <label translate="true">ID</label>
+                <filter>text</filter>
+                <sorting>asc</sorting>
+            </settings>
+        </column>
+        <column name="template_name" class="Magento\Ui\Component\Listing\Columns\Column">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Template Name</label>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="event" class="Magento\Ui\Component\Listing\Columns\Column">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">
+                    DarshilTech\SmsNotification\Model\Config\Source\Events</item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="sortable" xsi:type="boolean">true</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Events</item>
+                </item>
+            </argument>
+        </column>
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Column">
+            <settings>
+                <label translate="true">Created At</label>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <dateFormat>yyyy-MM-dd HH:mm:ss</dateFormat>
+            </settings>
+        </column>
+        <column name="updated_at" class="Magento\Ui\Component\Listing\Columns\Column">
+            <settings>
+                <label translate="true">Updated At</label>
+                <filter>dateRange</filter>
+                <dataType>date</dataType>
+                <dateFormat>yyyy-MM-dd HH:mm:ss</dateFormat>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="DarshilTech\SmsNotification\Ui\Listing\Column\Action">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="urlEntityParamName" xsi:type="string">id</item>
+                    <item name="editUrlPath" xsi:type="string">smsnotification/template/edit</item>
+                    <item name="deleteUrlPath" xsi:type="string">smsnotification/template/delete</item>
+                </item>
+            </argument>
+            <settings>
+                <indexField>entity_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="sms_template_listing_data_source" xsi:type="string">
+                    DarshilTech\SmsNotification\Model\ResourceModel\SmsService\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="DarshilTech\SmsNotification\Model\ResourceModel\SmsService\Grid\Collection"
+        type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">darshiltech_sms_service</argument>
+            <argument name="resourceModel" xsi:type="string">
+                DarshilTech\SmsNotification\Model\ResourceModel\SmsService\Collection</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="sms_log_listing_data_source" xsi:type="string">
+                    DarshilTech\SmsNotification\Model\ResourceModel\SmsLog\Grid\Collection
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="DarshilTech\SmsNotification\Model\ResourceModel\SmsLog\Grid\Collection"
+    type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+    <arguments>
+        <argument name="mainTable" xsi:type="string">darshiltech_sms_log</argument>
+        <argument name="resourceModel" xsi:type="string">
+            DarshilTech\SmsNotification\Model\ResourceModel\SmsLog\Collection</argument>
+    </arguments>
+</virtualType>
+</config>

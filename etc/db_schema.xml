@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- db_schema.xml -->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:Db\Schema/etc/db_schema.xsd">
+    <table name="darshiltech_sms_service" resource="default" engine="innodb"
+        comment="SMS Templates Table">
+        <column name="entity_id" xsi:type="int" unsigned="true" nullable="false" identity="true"
+            comment="Entity ID" />
+        <column name="template_name" xsi:type="varchar" nullable="false" length="255"
+            comment="Template Name" />
+        <column name="event" xsi:type="varchar" nullable="false" length="255" comment="Event Name" />
+        <column name="template_content" xsi:type="text" nullable="false" comment="Template Content" />
+        <column name="created_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP"
+            comment="Created At" />
+        <column name="updated_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP"
+            comment="Updated At" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id" />
+        </constraint>
+    </table>
+    <table name="darshiltech_sms_log" resource="default" engine="innodb" comment="SMS Log Table">
+        <column name="entity_id" xsi:type="int" padding="10" unsigned="true" nullable="false"
+            identity="true" comment="Entity ID" />
+        <column name="service_provider" xsi:type="text" nullable="false" comment="Service Provider" />
+        <column name="recipient_number" xsi:type="text" nullable="false" comment="Recipient Number" />
+        <column name="event_type" xsi:type="text" nullable="false" comment="Event Type" />
+        <column name="status" xsi:type="text" nullable="false" comment="Status" />
+        <column name="is_error" xsi:type="smallint" nullable="false" default="0" comment="Is Error" />
+        <column name="message_body" xsi:type="text" nullable="false" comment="Message Body" />
+        <column name="error_message" xsi:type="text" nullable="true" comment="Error Message" />
+        <column name="created_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP"
+            comment="Created At" />
+        <column name="updated_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP"
+            comment="Updated At" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id" />
+        </constraint>
+    </table>
+</schema>

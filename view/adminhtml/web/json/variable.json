@@ -1,0 +1,34 @@
+{
+    "Customer Info": [
+      { "label": "Customer Name", "variable": "{{customer_name}}" },
+      { "label": "Customer Email", "variable": "{{customer_email}}" },
+      { "label": "Customer Phone", "variable": "{{customer_phone}}" }
+    ],
+    "Order Info": [
+      { "label": "Order ID", "variable": "{{order_id}}" },
+      { "label": "Order Date", "variable": "{{order_date}}" },
+      { "label": "Order Total", "variable": "{{order_total}}" },
+      { "label": "Shipping Method", "variable": "{{shipping_method}}" },
+      { "label": "Payment Method", "variable": "{{payment_method}}" }
+    ],
+    "Invoice Info": [
+      { "label": "Invoice ID", "variable": "{{invoice_id}}" },
+      { "label": "Invoice Date", "variable": "{{invoice_date}}" },
+      { "label": "Invoice Total", "variable": "{{invoice_total}}" }
+    ],
+    "Store Info": [
+      { "label": "Store Name", "variable": "{{store_name}}" },
+      { "label": "Store URL", "variable": "{{store_url}}" },
+      { "label": "Store Email", "variable": "{{store_email}}" },
+      { "label": "Store Phone", "variable": "{{store_phone}}" },
+      { "label": "Store Hours", "variable": "{{store_hours}}" }
+    ],
+    "Address Info": [
+      { "label": "Billing Address", "variable": "{{formattedBillingAddress}}" },
+      { "label": "Shipping Address", "variable": "{{formattedShippingAddress}}" }
+    ],
+    "Account Info": [
+      { "label": "Account URL", "variable": "{{account_url}}" }
+    ]
+  }
+  

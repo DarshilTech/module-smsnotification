@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">
+                sms_log_listing.sms_log_listing_data_source</item>
+            <item name="deps" xsi:type="string">
+                sms_log_listing.sms_log_listing_data_source</item>
+        </item>
+        <item name="spinner" xsi:type="string">sms_log_columns</item>
+    </argument>
+
+    <settings>
+        <spinner>sms_log_columns</spinner>
+        <deps>
+            <dep>sms_log_listing.sms_log_listing_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="sms_log_listing_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">
+                Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
+            <argument name="name" xsi:type="string">sms_log_listing_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+                    <item name="update_url" path="mui/index/render" xsi:type="url" />
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">entity_id</item>
+                    </item>
+                </item>
+            </argument>
+        </argument>
+        <!-- <aclResource>Magento_Backend::marketing_communications</aclResource> -->
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters"/>
+        <!-- <massaction name="listing_massaction"/> -->
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="sms_log_columns">
+        <selectionsColumn name="ids" sortOrder="0">
+            <settings>
+                <indexField>entity_id</indexField>
+                <preserveSelectionsOnFilter>true</preserveSelectionsOnFilter>
+            </settings>
+        </selectionsColumn>
+        <column name="entity_id" class="Magento\Ui\Component\Listing\Columns\Column">
+            <settings>
+                <label translate="true">ID</label>
+                <filter>text</filter>
+                <sorting>asc</sorting>
+            </settings>
+        </column>
+        <column name="service_provider" class="Magento\Ui\Component\Listing\Columns\Column">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">DarshilTech\SmsNotification\Model\Config\Source\ProviderList</item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="sortable" xsi:type="boolean">true</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Service Provider</item>
+                </item>
+            </argument>
+        </column>
+        <column name="recipient_number" class="Magento\Ui\Component\Listing\Columns\Column">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Recipient Number</label>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="event_type" class="Magento\Ui\Component\Listing\Columns\Column">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">DarshilTech\SmsNotification\Model\Config\Source\Events</item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="sortable" xsi:type="boolean">true</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Event Trigger</item>
+                </item>
+            </argument>
+        </column>
+        <column name="status" class="Magento\Ui\Component\Listing\Columns\Column">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Message Status</label>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="DarshilTech\SmsNotification\Ui\Listing\Column\Action">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="urlEntityParamName" xsi:type="string">id</item>
+                    <item name="viewUrlPath" xsi:type="string">smsnotification/smslog/view</item>
+                </item>
+            </argument>
+            <settings>
+                <indexField>entity_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>
