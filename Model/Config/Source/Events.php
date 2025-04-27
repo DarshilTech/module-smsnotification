@@ -47,6 +47,10 @@ class Events implements ArrayInterface
             [
                 'value' => 'sales_order_shipment_save_after',
                 'label' => __('Shipment Update')
+            ],
+            [
+                'value' => 'login_otp',
+                'label' => __('Login OTP')
             ]
         ];
     }

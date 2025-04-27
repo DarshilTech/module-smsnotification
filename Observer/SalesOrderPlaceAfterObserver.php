@@ -53,7 +53,7 @@ class SalesOrderPlaceAfterObserver extends MainObserver
                     $result = $this->smsProvider->sendSms($customer_number, $message);
 
                     // Log the result
-                    $resultLog = $this->helperData->createLogs($event, $result);
+                    $resultLog = $this->helperData->createLogs($event->getName(), $result);
                     $smsLog = $this->smsLog;
                     $smsLog->setData($resultLog);
                     $smsLog->save();

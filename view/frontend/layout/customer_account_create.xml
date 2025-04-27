@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+       <css src="DarshilTech_SmsNotification::css/custom.css"/>
+       <css src="DarshilTech_SmsNotification::css/intlTelInput.css"/>
+       <script src="DarshilTech_SmsNotification::js/utils.js"/>
+   </head>
+    <body>
+        <referenceContainer name="fieldset.create.info.additional">
+            <block class="Magento\Framework\View\Element\Template" ifconfig="smsnotification/otp_condfiguration/enabled" name="form_additional_info_customer" before="login_as_customer_opt_in_create" template="DarshilTech_SmsNotification::form/mobileregister.phtml" cacheable="false"/>
+        </referenceContainer>
+    </body>
+</page>

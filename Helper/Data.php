@@ -7,13 +7,25 @@ use DarshilTech\SmsNotification\Model\SmsService;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Customer\Model\Session as CustomerSession;
+
 class Data extends AbstractHelper
 {
+    const OTP_TYPE = 'smsnotification/otp_condfiguration/otp_type';
+    const OTP_LENGTH = 'smsnotification/otp_condfiguration/otp_length';
+    const EXPIRE_TIME = 'smsnotification/otp_condfiguration/expire_time';
+    const COUNTRY_CODE_PATH = 'general/country/default';
     protected $encryptor;
     protected $smsService;
     protected $storeManager;
     protected $dateTimeFormatter;
     protected $customerSession;
+
+    protected $otpFactory;
+
+    protected $collection;
+    protected $remoteaddress;
+    protected $jsonHelper;
+    protected $httpFile;
 
     public function __construct(
         Context $context,
@@ -21,6 +33,11 @@ class Data extends AbstractHelper
         DateTime $dateTimeFormatter,
         StoreManagerInterface $storeManager,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
+        \DarshilTech\SmsNotification\Model\OtpFactory $otpFactory,
+        \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteaddress,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
+        \Magento\Framework\Filesystem\Driver\Http $httpFile,
+        \Magento\Customer\Model\ResourceModel\Customer\Collection $collection,
         CustomerSession $customerSession
     ) {
         parent::__construct($context);
@@ -40,6 +57,98 @@ class Data extends AbstractHelper
         $this->storeManager = $storeManager;
         $this->dateTimeFormatter = $dateTimeFormatter;
         $this->customerSession = $customerSession;
+        $this->otpFactory = $otpFactory;
+        $this->collection = $collection;
+        $this->remoteaddress = $remoteaddress;
+        $this->jsonHelper = $jsonHelper;
+        $this->httpFile = $httpFile;
+    }
+    public function getConfigvalue($path)
+    {
+        return $this->scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+    }
+    public function getOtptype()
+    {
+        return $this->getConfigvalue(self::OTP_TYPE);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerIPAddress()
+    {
+        $local = ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' || $_SERVER['REMOTE_ADDR'] == '::1') ? true : false;
+        if ($local) {
+            return '8.8.8.8';
+        }
+        return $this->remoteaddress->getRemoteAddress();
+    }
+
+    public function getCustomerIPDetails()
+    {
+        $customerIpAddress = $this->getCustomerIPAddress();
+        try {
+            $ipData = $this->jsonHelper->jsonDecode(
+                $this->httpFile->fileGetContents(
+                    "www.geoplugin.net/json.gp?ip=" . $customerIpAddress
+                )
+            );
+            return $ipData['geoplugin_countryCode'];
+        } catch (\Exception $e) {
+            return $this->getConfigvalue(
+                self::COUNTRY_CODE_PATH
+            );
+        }
+    }
+
+    public function getOtplength()
+    {
+        return $this->getConfigvalue(self::OTP_LENGTH);
+    }
+    public function getExpiretime()
+    {
+        return $this->getConfigvalue(self::EXPIRE_TIME);
+    }
+    public function getOtpcode()
+    {
+        $otp_type = $this->getOtptype();
+        $otp_length = $this->getOtplength();
+
+        if (empty($otp_length)) {
+            $otp_length = 4;
+        }
+        if ($otp_type == "number") {
+            $str_result = '0123456789';
+            $otp_code =  substr(str_shuffle($str_result), 0, $otp_length);
+        } elseif ($otp_type == "alphabets") {
+            $str_result = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+            $otp_code =  substr(str_shuffle($str_result), 0, $otp_length);
+        } elseif ($otp_type == "alphanumeric") {
+            $str_result = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+            $otp_code =  substr(str_shuffle($str_result), 0, $otp_length);
+        } else {
+            $otp_code = mt_rand(10000, 99999);
+        }
+        return $otp_code;
+    }
+    public function setOtpdata($otp, $mobile_number)
+    {
+        $question = $this->otpFactory->create();
+        $question->setOtp($otp);
+        $question->setCustomer($mobile_number);
+        $question->setStatus('1');
+        $question->save();
+    }
+    public function setUpdateotpstatus($mobile_number)
+    {
+        $customerstatus = $this->otpFactory->create()->getCollection()->addFieldToFilter('customer', $mobile_number)->getData();
+        if (!empty($customerstatus)) {
+            foreach ($customerstatus as $data) {
+                $customerstatus1 = $this->otpFactory->create()->load($data['entity_id']);
+                $customerstatus1->setStatus('0');
+                $customerstatus1->save();
+            }
+        }
     }
     public function isEnable()
     {
@@ -115,7 +224,7 @@ class Data extends AbstractHelper
     {
         $result = [
             'service_provider' => $this->getSmsProvider(),
-            'event_type' => $event->getName() ?? 'Unknown Event',
+            'event_type' => $event ?? 'Unknown Event',
             'recipient_number' => '',
             'message_body' => '',
             'status' => '',
@@ -302,7 +411,7 @@ class Data extends AbstractHelper
             ];
 
             if ($entity == 'invoice') {
-                $variables['{{invoice_id}}'] =  $event->getInvoice()->getIncrementId() ?? 'N/A';
+                $variables['{{invoice_id}}'] = $event->getInvoice()->getIncrementId() ?? 'N/A';
                 $variables['{{invoice_date}}'] = $event->getInvoice() ? $this->dateTimeFormatter->formatDate($order->getCreatedAt(), \IntlDateFormatter::MEDIUM) : 'N/A';
                 $variables['{{invoice_total}}'] = $event->getInvoice() && $event->getInvoice()->getGrandTotal() ? $order->getOrderCurrencyCode() . ' ' . number_format($event->getInvoice()->getGrandTotal(), 2) : 'N/A';
             } else if ($entity == 'shipment') {
@@ -316,6 +425,28 @@ class Data extends AbstractHelper
             }
 
             return $variables;
+        } catch (\Exception $e) {
+            // add logger to print log
+            return [];
+        }
+    }
+    public function getCustomerTemplateVariables($event)
+    {
+        try {
+            $customer = $event->getCustomer();
+            $variables = [
+                '{{customer_name}}' => $customer->getFirstname() . ' ' . $customer->getLastname(),
+                '{{customer_email}}' => $customer->getEmail(),
+                '{{customer_phone}}' => $customer->getTelephone(),
+                '{{store_name}}' => $this->getStoreName() ?? 'N/A',
+                '{{store_url}}' => $this->getStoreUrl() ?? 'N/A',
+                '{{account_url}}' => $this->getStoreUrl() ? $this->getStoreUrl() . 'customer/account/' : 'N/A',
+                '{{store_email}}' => $this->getStoreEmail() ?? 'N/A',
+                '{{store_phone}}' => $this->getStorePhone() ?? 'N/A',
+            ];
+
+            return $variables;
+
         } catch (\Exception $e) {
             // add logger to print log
             return [];

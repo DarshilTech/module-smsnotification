@@ -72,5 +72,31 @@ class TwilioProvider
 
         }
     }
+    public function getSendotp($otp_code, $mobile_number)
+    {
+        try {
+            if (!$this->twilioClient) {
+                throw new \Exception('Twilio client not properly initialized.');
+            }
+            $params = [
+                'body' => $otp_code,
+                'to' => $mobile_number,
+            ];
+            if ($this->serviceid) {
+                $params['messagingServiceSid'] = $this->serviceid;
+            } elseif ($this->fromNumber) {
+                $params['from'] = $this->fromNumber;
+            } else {
+                throw new \Exception('Neither messaging service ID nor from number is set.');
+            }
+            $result = $this->twilioClient->messages->create($mobile_number, $params);
+            return $result;
+        } catch (\Exception $e) {
+            return [
+                'error' => true,
+                'message' => $e->getMessage()
+            ];
+        }
+    }
 
 }

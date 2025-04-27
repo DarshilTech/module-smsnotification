@@ -24,7 +24,7 @@ abstract class MainObserver implements ObserverInterface
 
         // Initialize the SMS provider based on configuration
         $provider = $this->helperData->getSmsProvider();
-        if ($provider == 'twilio') {
+        if ($provider === 'twilio') {
             $this->smsProvider = \Magento\Framework\App\ObjectManager::getInstance()->create(TwilioProvider::class);
         }
     }
