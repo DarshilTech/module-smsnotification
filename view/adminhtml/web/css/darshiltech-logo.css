@@ -1,0 +1,15 @@
+.config-nav .darshiltech-logo .admin__page-nav-title::before {
+  content: '';
+  background-image: url(../images/darshiltech-logo.png);
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: contain; /* Adjusts the image size */
+  height: 90%;
+  position: absolute;
+  width: 70%;
+  top: 4px;
+}
+
+.config-nav .darshiltech-logo .admin__page-nav-title strong {
+  margin-left: 40px;
+}
